@@ -16,21 +16,52 @@
     </div>
 
     <script>
+        const windowScreenLeft = window.screenLeft;
+        const windowScreenTop = window.screenTop;
+        console.log(window.innerWidth);
+        console.log(window.innerHeight);
+
         var id = null;
 
         function myMove() {
             var elem = document.getElementById("myAnimation");
-            var pos = 0;
+            var posLeft = 0;
+            var posTop = 50;
+            var posRight = 0;
+            var posBottom = 0;
+
             clearInterval(id);
-            id = setInterval(frame, 10);
+            id = setInterval(frame, 1);
 
             function frame() {
-                if (pos == 360) {
-                    clearInterval(id);
+                if (posLeft === window.innerWidth - 100 && posTop !== window.innerHeight - 100) {
+                    posTop++;
+                    elem.style.top = posTop + 'px';
+
+                } else if (posLeft === window.innerWidth - 100 && posTop === window.innerHeight - 100 && posRight !== window.innerWidth) {
+                    elem.style.left = 'unset';
+                    posRight++;
+                    elem.style.right = posRight + 'px';
+
+                } else if (posRight === window.innerWidth && posBottom !== window.innerHeight - 100) {
+                    console.log("test");
+                    posLeft=0;
+                    posTop = 50;
+                    // posRight = 0;
+
+                    elem.style.left = 0 + 'px';
+                    elem.style.top = 'unset';
+                    elem.style.right = 'unset';
+
+                    posBottom++;
+                    elem.style.bottom = posBottom -50 + 'px';
+
                 } else {
-                    pos++;
-                    elem.style.left = pos + 'px';
-                    elem.style.top = pos + 'px';
+                    posBottom = 0;
+                    posRight = 0;
+
+                    posLeft++;
+                    elem.style.left = posLeft + 'px';
                 }
             }
         }
