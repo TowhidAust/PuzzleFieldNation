@@ -1,3 +1,19 @@
+<?php 
+    $connect = mysqli_connect('localhost', 'admin', '123456', 'fieldnationtestdb');
+    if(!$connect) {
+        echo "Connection error" . mysqli_connect_error();
+    }
+
+    $sql = 'SELECT first_name FROM user';
+    // make the query and get the result
+    $result = mysqli_query($connect, $sql);
+    $usersArr = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result); // free the memory
+    mysqli_close($connect);
+    print_r($usersArr);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -11,61 +11,42 @@
 </head>
 
 <body>
-    <div class="hundred-pixel-container" id="myAnimation" onclick="myMove()">
+    <div class="hundred-pixel-container" id="hundred-pixel-box" onclick="myMove()">
         100 * 100
     </div>
 
     <script>
-        const windowScreenLeft = window.screenLeft;
-        const windowScreenTop = window.screenTop;
-        console.log(window.innerWidth);
-        console.log(window.innerHeight);
+        setInterval(moveBox, 1000);
 
-        var id = null;
+        function moveBox() {
 
-        function myMove() {
-            var elem = document.getElementById("myAnimation");
-            var posLeft = 0;
-            var posTop = 50;
-            var posRight = 0;
-            var posBottom = 0;
+            let element = document.getElementById('hundred-pixel-box');
+            let rect = element.getBoundingClientRect(); // to find the position according to its viewport
+            let move = 10;
 
-            clearInterval(id);
-            id = setInterval(frame, 1);
+            let goRight = ((rect.right + move) <= window.innerWidth) ? true : false;
+            let goBottom = ((rect.bottom + move) <= window.innerHeight) ? true : false;
 
-            function frame() {
-                if (posLeft === window.innerWidth - 100 && posTop !== window.innerHeight - 100) {
-                    posTop++;
-                    elem.style.top = posTop + 'px';
+            let goBottomRight = (goRight && goBottom) ? true : false;
 
-                } else if (posLeft === window.innerWidth - 100 && posTop === window.innerHeight - 100 && posRight !== window.innerWidth) {
-                    elem.style.left = 'unset';
-                    posRight++;
-                    elem.style.right = posRight + 'px';
-
-                } else if (posRight === window.innerWidth && posBottom !== window.innerHeight - 100) {
-                    console.log("test");
-                    posLeft=0;
-                    posTop = 50;
-                    // posRight = 0;
-
-                    elem.style.left = 0 + 'px';
-                    elem.style.top = 'unset';
-                    elem.style.right = 'unset';
-
-                    posBottom++;
-                    elem.style.bottom = posBottom -50 + 'px';
-
-                } else {
-                    posBottom = 0;
-                    posRight = 0;
-
-                    posLeft++;
-                    elem.style.left = posLeft + 'px';
-                }
+            
+            if (typeof(goDirection) == 'undefined') goDirection = 'bottomRight';
+            if (goDirection == 'topLeft') {
+                if (rect.left == 0) goDirection = 'bottomRight';
+                if (rect.left > 0) goDirection = 'topLeft';
+            } else if (goDirection == 'bottomRight') {
+                goDirection = (goBottomRight) ? 'bottomRight' : 'topLeft';
             }
+
+            if (goDirection == 'bottomRight') {
+                element.style.top = (rect.top + move) + "px";
+                element.style.left = (rect.left + move) + "px";
+            } else if (goDirection == 'topLeft') {
+                element.style.top = (rect.top - move) + "px";
+                element.style.left = (rect.left - move) + "px";
+            }
+
         }
-        myMove();
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
