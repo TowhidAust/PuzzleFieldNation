@@ -4,9 +4,14 @@
         echo "Connection error" . mysqli_connect_error();
     }
 
-    $sql = 'SELECT user.id, user.first_name, user.last_name, test_result.correct, test_result.time_taken
-    FROM user
-    INNER JOIN test_result ON user.id=test_result.user_id';
+    $sql = 'SELECT user.first_name, user.last_name, AVG (test_result.correct), test_result.time_taken
+    FROM user 
+    LEFT JOIN test_result ON user.id = test_result.user_id 
+    GROUP BY user.id
+  	ORDER BY test_result.time_taken DESC;';
+
+    // $sql = 'SELECT user.id, user.first_name, user.last_name, test_result.user_id FROM user FULL OUTER JOIN test_result ON user.id=test_result.user_id ORDER BY user.first_name';
+
     // make the query and get the result
     $result = mysqli_query($connect, $sql);
     $usersArr = mysqli_fetch_all($result, MYSQLI_ASSOC);
